@@ -19,8 +19,8 @@ class Player < Vector2
   end
 
   def process_life
-    make_sons()
     @route.push(Vector2.new(@x,@y))
+    make_sons()
     @stage.get_block(self).type = TYPE::PASSED
     @alive = false#death
   end
@@ -34,9 +34,6 @@ class Player < Vector2
   end
 
   def clone_array(array)
-    copy = Array.new
-    array.each do |e|
-      copy.push(e.clone)
-    end
+    Marshal.load(Marshal.dump(array))
   end
 end

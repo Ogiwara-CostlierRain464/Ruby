@@ -78,7 +78,7 @@ class Stage
     puts "GAMEOVER" if @status == GAME_RESULT::GAME_OVER
     puts "CLEAR" if @status == GAME_RESULT::GAME_CLEAR
     print_stage()
-    #バグあり…print_winner_route()
+    print_winner_route()
   end
 
   def get_block(vec)
@@ -110,7 +110,7 @@ class Stage
   def print_winner_route
     puts "Routes:"
     @winner.route.each do |e|
-      puts e.to_s
+      puts e
     end
   end
 
