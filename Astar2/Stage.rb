@@ -38,14 +38,14 @@ class Stage
 
   def initialize
     @@instance = self
-    @map = [[1,1,1,1,1,1,1,1],
-            [1,1,1,1,0,0,0,1],
-            [0,1,1,1,0,0,1,1],
-            [0,0,0,1,0,0,0,1],
-            [1,1,0,1,1,0,1,1],
-            [0,0,0,0,0,0,1,1],
-            [1,1,0,1,1,1,1,1],
-            [1,0,0,1,1,1,1,1]]
+    @map = [[0,0,0,0,0,0,0,1],
+            [0,1,1,1,1,1,0,1],
+            [0,1,0,0,0,0,1,1],
+            [0,1,0,1,1,1,1,0],
+            [0,1,0,1,1,1,1,0],
+            [0,1,0,0,0,1,1,0],
+            [0,1,0,1,1,1,1,0],
+            [0,0,0,0,0,0,0,0]]
     @players = Array.new
     @winner = nil
     @status = GAME_RESULT::GAMING
@@ -71,22 +71,32 @@ class Stage
         end
         #print_stage()
       end
-      @status = GAME_RESULT::GAME_OVER if counter == 0
-     nextplayer.process_life()
+
+      if counter == 0
+        @status = GAME_RESULT::GAME_OVER
+        break
+      end
+      nextplayer.process_life()
     end
     puts "finished!"
-    puts "GAMEOVER" if @status == GAME_RESULT::GAME_OVER
-    puts "CLEAR" if @status == GAME_RESULT::GAME_CLEAR
+    case @status
+      when GAME_RESULT::GAME_CLEAR
+        print_winner_route()
+        puts "CLEAR!"
+      when GAME_RESULT::GAME_OVER
+        puts "GAMEOVER..."
+    end
     print_stage()
-    print_winner_route()
   end
 
+  #@return Block
   def get_block(vec)
     @blocks.each do |e|
       if(e.x==vec.x and e.y==vec.y)
         return e
       end
     end
+    Block.new(1,999,vec)
   end
 
   def load_map

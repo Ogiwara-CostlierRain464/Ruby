@@ -36,4 +36,11 @@ class Player < Vector2
   def clone_array(array)
     Marshal.load(Marshal.dump(array))
   end
+
+  def test
+    puts "Routes:"
+    @route.each do |e|
+      puts e
+    end
+  end
 end
