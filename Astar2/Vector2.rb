@@ -5,6 +5,11 @@ class Vector2
     @x = x
     @y = y
   end
+
+  def to_s
+    "X:#{@x} Y:#{@y}"
+  end
+
   def front; Vector2.new(@x,@y-1) end
   def back; Vector2.new(@x,@y+1) end
   def left; Vector2.new(@x-1,@y) end

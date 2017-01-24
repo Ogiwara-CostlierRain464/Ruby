@@ -27,9 +27,16 @@ class Player < Vector2
 
   def make_sons
     f = front(); b = back(); l = left(); r = right()
-    @stage.players.push(Player.new(f,@route.clone)) if @stage.get_block(f).type == TYPE::ROAD
-    @stage.players.push(Player.new(b,@route.clone)) if @stage.get_block(b).type == TYPE::ROAD
-    @stage.players.push(Player.new(l)) if @stage.get_block(l).type == TYPE::ROAD
-    @stage.players.push(Player.new(r)) if @stage.get_block(r).type == TYPE::ROAD
+    @stage.players.push(Player.new(f,clone_array(@route))) if @stage.get_block(f).type == TYPE::ROAD
+    @stage.players.push(Player.new(b,clone_array(@route))) if @stage.get_block(b).type == TYPE::ROAD
+    @stage.players.push(Player.new(l,clone_array(@route))) if @stage.get_block(l).type == TYPE::ROAD
+    @stage.players.push(Player.new(r,clone_array(@route))) if @stage.get_block(r).type == TYPE::ROAD
+  end
+
+  def clone_array(array)
+    copy = Array.new
+    array.each do |e|
+      copy.push(e.clone)
+    end
   end
 end
