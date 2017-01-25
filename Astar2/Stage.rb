@@ -28,9 +28,7 @@ module GAME_RESULT
 end
 
 class Stage
-  attr_accessor :map
   attr_accessor :players
-  attr_accessor :blocks
   attr_accessor :start_pos
   attr_accessor :end_pos
   attr_accessor :status
@@ -38,11 +36,11 @@ class Stage
 
   def initialize
     @@instance = self
-    @map = [[0,0,0,0,0,0,0,1],
-            [0,1,1,1,1,1,0,1],
-            [0,1,0,0,0,0,1,1],
+    @map = [[0,0,0,0,1,1,1,1],
+            [0,1,1,1,0,0,0,0],
+            [0,1,0,0,0,1,1,1],
             [0,1,0,1,1,1,1,0],
-            [0,1,0,1,1,1,1,0],
+            [0,1,1,1,1,1,1,0],
             [0,1,0,0,0,1,1,0],
             [0,1,0,1,1,1,1,0],
             [0,0,0,0,0,0,0,0]]
@@ -64,12 +62,11 @@ class Stage
       nextplayer = nil
       counter = 0
       @players.each do |e|
-        if ((n = get_block(e).cost) < min and e.alive)
+        if ((n = (get_block(e).cost + e.route.length)) < min and e.alive)
           min = n
           nextplayer = e
           counter += 1
         end
-        #print_stage()
       end
 
       if counter == 0
@@ -91,29 +88,47 @@ class Stage
 
   #@return Block
   def get_block(vec)
-    @blocks.each do |e|
-      if(e.x==vec.x and e.y==vec.y)
-        return e
-      end
-    end
+    #@blocks.each do |e|
+    #  if(e.x==vec.x and e.y==vec.y)
+    #    return e
+    #  end
+    #end
+    #Block.new(1,999,vec)
+    return Block.new(1,999,vec) if @fast_blocks[vec.y].nil?
+    @fast_blocks[vec.y].each { |e|
+      return e if e.x == vec.x
+    }
     Block.new(1,999,vec)
   end
 
   def load_map
     @start_pos = Vector2.new(2,5);@end_pos = Vector2.new(6,1)
-    @blocks = Array.new
-    @map.each_with_index do |y_blocks,y|
-      y_blocks.each_with_index do |type,x|
+    #blocks = Array.new
+    #@map.each_with_index do |y_blocks,y|
+    #  y_blocks.each_with_index do |type,x|
+    #    vec = Vector2.new(x,y)
+    #    blocks.push(Block.new(type,calculate_cost(@end_pos,vec),vec))
+    #  end
+    #end
+    @fast_blocks = Array.new
+    @fast_blocks = @map.map.with_index do |y_blocks,y|
+      y_blocks.map.with_index do |type,x|
         vec = Vector2.new(x,y)
-        @blocks.push(Block.new(type,calculate_cost(@end_pos,vec),vec))
+        Block.new(type,calculate_cost(@end_pos,vec),vec)
       end
     end
   end
 
   def print_stage
-    @blocks.each_with_index do |e,i|
-      print "#{e.type} "
-      puts("") if (i+1)%8 == 0
+    #@blocks.each_with_index do |e,i|
+    #  print "#{e.type} "
+    #  puts("") if (i+1)%8 == 0
+    #end
+    @fast_blocks.each_with_index do |e,i|
+      e.each_with_index do |ee,ii|
+        print "#{ee.type} "
+        puts " ...#{i}" if(ii+1)%8 == 0
+      end
     end
   end
 

@@ -1,7 +1,8 @@
 require './Vector2.rb'
 require './Stage.rb'
 
-#一歩歩くと死ぬ
+#一歩歩くと死ぬ->分岐がないときは死なないようにする?
+#並列処理?
 #次に行く場所が保存
 class Player < Vector2
   attr_accessor :alive
